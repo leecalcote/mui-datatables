@@ -1,6 +1,8 @@
 import Enzyme from 'enzyme';
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-16';
+import AdapterPkg from '@cfaester/enzyme-adapter-react-18';
+
+const Adapter = AdapterPkg.default || AdapterPkg;
 
 /* required when running >= 16.0 */
 Enzyme.configure({ adapter: new Adapter() });
@@ -9,7 +11,9 @@ function setupDom() {
   const { JSDOM } = require('jsdom');
   const Node = require('jsdom/lib/jsdom/living/node-document-position');
 
-  const dom = new JSDOM('<!doctype html><html><body></body></html>');
+  const dom = new JSDOM('<!doctype html><html><body></body></html>', {
+    url: 'http://localhost'
+  });
 
   global.window = dom.window;
   global.document = window.document;
@@ -19,6 +23,8 @@ function setupDom() {
     userAgent: 'node.js',
     appVersion: '',
   };
+  global.localStorage = global.window.localStorage;
+  global.sessionStorage = global.window.sessionStorage;
 
   function copyProps(src, target) {
     const props = Object.getOwnPropertyNames(src)
@@ -61,7 +67,9 @@ function setupDom() {
   global.window.getComputedStyle = () => ({});
 
   Object.defineProperty(global.window.URL, 'createObjectURL', { value: () => {} });
-  global.Blob = () => '';
+  const blobImpl = global.Blob || global.window.Blob;
+  global.Blob = blobImpl;
+  global.window.Blob = blobImpl;
 }
 
 setupDom();

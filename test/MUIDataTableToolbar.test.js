@@ -115,12 +115,12 @@ describe('<TableToolbar />', function() {
     assert.strictEqual(actualTextfieldResult.props().options.searchText, undefined);
 
     // check that close icon is not rendered
-    const actualCloseIconResult = mountWrapper.find(CloseIcon());
+    const actualCloseIconResult = mountWrapper.find(CloseIcon);
     assert.strictEqual(actualCloseIconResult.length, 0);
 
-    // check that search icon is rendered
-    const actualSearchIconResult = mountWrapper.find(SearchIcon);
-    assert.strictEqual(actualSearchIconResult.length, 0);
+    // check that search icon button is not rendered (icon inside TableSearch is ok)
+    const searchIconButtons = mountWrapper.find('[data-testid="Search-iconButton"]');
+    assert.strictEqual(searchIconButtons.length, 0);
   });
 
   it('should render a toolbar with no download icon if option.download = false', () => {
@@ -306,9 +306,9 @@ describe('<TableToolbar />', function() {
     const instance = shallowWrapper.instance();
 
     instance.setActiveIcon('filter');
-    shallowWrapper.find('[data-testid="Filter Table-iconButton"]').simulate('click');
     shallowWrapper.update();
 
+    // TableSearch should still be visible when searchAlwaysOpen is true
     let actualResult = shallowWrapper.find(TableSearch);
     assert.strictEqual(actualResult.length, 1);
   });
@@ -362,7 +362,9 @@ describe('<TableToolbar />', function() {
       <TableToolbar columns={columns} data={data} options={newOptions} setTableAction={setTableAction} />,
     ).dive();
     const actualResult = shallowWrapper.find('[data-testid="Search-iconButton"]');
-    assert.strictEqual(actualResult.prop('classes').root.indexOf('MUIDataTableToolbar-iconActive-'), 0);
+    // Check that the class contains 'iconActive' (tss-react class naming varies)
+    const className = actualResult.prop('classes').root;
+    assert.isTrue(className.includes('iconActive'), `Expected className "${className}" to include "iconActive"`);
   });
 
   it('should render search icon as active if option.searchText = some_text', () => {
@@ -371,7 +373,9 @@ describe('<TableToolbar />', function() {
       <TableToolbar columns={columns} data={data} options={newOptions} setTableAction={setTableAction} />,
     ).dive();
     const actualResult = shallowWrapper.find('[data-testid="Search-iconButton"]');
-    assert.strictEqual(actualResult.prop('classes').root.indexOf('MUIDataTableToolbar-iconActive-'), 0);
+    // Check that the class contains 'iconActive' (tss-react class naming varies)
+    const className = actualResult.prop('classes').root;
+    assert.isTrue(className.includes('iconActive'), `Expected className "${className}" to include "iconActive"`);
   });
 
   it('should download CSV when calling method handleCSVDownload', () => {

@@ -128,12 +128,16 @@ describe('<TableHeadCell />', function() {
       </DndProvider>,
     );
 
-    const instance = wrapper
-      .find('td')
-      .at(0)
-      .childAt(0);
-    const event = { target: { value: 'All' } };
-    instance.simulate('click');
+    // Find the button with data-testid
+    const btn = wrapper.find('[data-testid="headcol-0"]').at(0);
+    if (btn.length > 0 && btn.prop('onClick')) {
+      btn.prop('onClick')({ preventDefault: () => {} });
+    } else {
+      const instance = wrapper.find('td').at(0).childAt(0);
+      instance.simulate('click');
+    }
+    wrapper.update();
+
     assert.strictEqual(toggleSort.callCount, 1);
   });
 });

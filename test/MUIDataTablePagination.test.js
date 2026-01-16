@@ -29,10 +29,13 @@ describe('<TablePagination />', function() {
       <TablePagination options={options} count={100} page={1} rowsPerPage={10} changePage={changePage} />,
     );
 
-    wrapper
-      .find('#pagination-next')
-      .at(0)
-      .simulate('click');
+    const nextBtn = wrapper.find('#pagination-next').at(0);
+    if (nextBtn.prop('onClick')) {
+      nextBtn.prop('onClick')({ preventDefault: () => {} });
+    } else {
+      nextBtn.simulate('click');
+    }
+    wrapper.update();
     wrapper.unmount();
 
     assert.strictEqual(changePage.callCount, 1);

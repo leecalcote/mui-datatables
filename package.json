@@ -1,6 +1,6 @@
 {
-  "name": "mui-datatables",
-  "version": "4.3.0",
+  "name": "@sistent/mui-datatables",
+  "version": "5.0.0",
   "description": "Datatables for React using Material-UI",
   "main": "dist/index.js",
   "files": [
@@ -8,14 +8,14 @@
   ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server -d --progress --colors",
-    "test": "cross-env NODE_ENV=test mocha --require @babel/register test/**/*.test.js",
+    "test": "cross-env NODE_ENV=test mocha --require ./test/babel-register.js --extensions js,jsx test/**/*.test.js",
     "docs:dev": "next docs",
     "docs:build": "cross-env NODE_ENV=production next build docs",
     "docs:export": "next export docs -o docs/export",
     "docs:deploy": "npm run docs:build && npm run docs:export && firebase deploy",
     "docs:start": "next start docs",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha --require @babel/register test/*.js && nyc report --reporter=html | cat coverage/lcov.info | coveralls",
-    "coverage:html": "cross-env NODE_ENV=test nyc check-coverage --lines 55 --reporter=html --reporter=text mocha --require @babel/register test/*.js && nyc report --reporter=html",
+    "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha --require ./test/babel-register.js --extensions js,jsx test/*.js && nyc report --reporter=html | cat coverage/lcov.info | coveralls",
+    "coverage:html": "cross-env NODE_ENV=test nyc check-coverage --lines 55 --reporter=html --reporter=text mocha --require ./test/babel-register.js --extensions js,jsx test/*.js && nyc report --reporter=html",
     "prettier": "find src/ docs/ test/ -type f -name \"*.js\" ! -path \"*/.next/*\" | xargs prettier --write",
     "lint": "eslint src",
     "build": "cross-env NODE_ENV=production npm run prettier && rollup -c",
@@ -55,7 +55,7 @@
     "@rollup/plugin-commonjs": "^12.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
     "@rollup/plugin-replace": "^2.3.2",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
+    "@cfaester/enzyme-adapter-react-18": "^0.8.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-istanbul": "^6.0.0",
@@ -77,7 +77,7 @@
     "jsdom": "^16.2.2",
     "jsdom-global": "^3.0.2",
     "mocha": "^7.2.0",
-    "next": "^11.1.2",
+    "next": "^15.0.0",
     "nyc": "^15.0.1",
     "prettier": "^1.18.2",
     "prismjs": "^1.20.0",
@@ -124,6 +124,9 @@
     "react-sortable-tree-patch-react-17": "^2.9.0",
     "react-to-print": "^2.8.0"
   },
+  "overrides": {
+    "cheerio": "1.0.0-rc.12"
+  },
   "side-effects": false,
   "nyc": {
     "lines": 50,
@@ -140,5 +143,10 @@
     ],
     "sourceMap": false,
     "instrument": false
+  },
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
   }
 }
