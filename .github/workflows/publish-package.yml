@@ -80,7 +80,7 @@ jobs:
           commit_user_name: leecalcote
           commit_user_email: lee@toones.io
           commit_author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
 
 
 
