@@ -55,7 +55,7 @@ If your project doesn't already use them, you need to install MUI v7 and its ico
 | ^3.0.0         | ^4.10.0     | `@material-ui/core`,`@material-ui/icons`            |
 | ^3.8.0         | ^4.12.0     | `@material-ui/core`,`@material-ui/icons`            |
 | ^4.0.0         | ^5.9.3      | `@mui/material`,`@mui/icons-material`               |
-| 4.3.x          | ^7.3.7      | `@mui/material`,`@mui/icons-material`               |
+|  5.0.x          | ^7.3.7      | `@mui/material`,`@mui/icons-material`               |
 
 ## Demo
 
