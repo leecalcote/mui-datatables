@@ -105,7 +105,13 @@ describe('<TableHead />', function() {
     );
 
     const instance = wrapper.find('th span').at(0);
-    instance.simulate('click');
+    const btn = instance.find('button').at(0);
+    if (btn.length > 0 && btn.prop('onClick')) {
+      btn.prop('onClick')({ preventDefault: () => {} });
+    } else {
+      instance.simulate('click');
+    }
+    wrapper.update();
 
     assert.strictEqual(toggleSort.callCount, 1);
   });

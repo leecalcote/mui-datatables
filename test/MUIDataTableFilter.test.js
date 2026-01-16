@@ -303,10 +303,13 @@ describe('<TableFilter />', function() {
       />,
     );
 
-    wrapper
-      .find('[data-testid="filterReset-button"]')
-      .at(0)
-      .simulate('click');
+    const resetBtn = wrapper.find('[data-testid="filterReset-button"]').at(0);
+    if (resetBtn.prop('onClick')) {
+      resetBtn.prop('onClick')({ preventDefault: () => {} });
+    } else {
+      resetBtn.simulate('click');
+    }
+    wrapper.update();
 
     assert.equal(onFilterReset.callCount, 1);
     assert.equal(handleClose.callCount, 0);

@@ -11,6 +11,7 @@ import isUndefined from 'lodash.isundefined';
 import merge from 'lodash.merge';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { flushSync } from 'react-dom';
 import DefaultTableBody from './components/TableBody';
 import DefaultTableFilter from './components/TableFilter';
 import DefaultTableFilterList from './components/TableFilterList';
@@ -1227,113 +1228,119 @@ class MUIDataTable extends React.Component {
   }
 
   toggleSortColumn = index => {
-    this.setState(
-      prevState => {
-        let columns = cloneDeep(prevState.columns);
-        let data = prevState.data;
-        let newOrder = columns[index].sortDescFirst ? 'desc' : 'asc'; // default
+    flushSync(() => {
+      this.setState(
+        prevState => {
+          let columns = cloneDeep(prevState.columns);
+          let data = prevState.data;
+          let newOrder = columns[index].sortDescFirst ? 'desc' : 'asc'; // default
 
-        let sequenceOrder = ['asc', 'desc'];
-        if (columns[index].sortDescFirst) {
-          sequenceOrder = ['desc', 'asc'];
-        }
-        if (columns[index].sortThirdClickReset) {
-          sequenceOrder.push('none');
-        }
-
-        if (columns[index].name === this.state.sortOrder.name) {
-          let pos = sequenceOrder.indexOf(this.state.sortOrder.direction);
-          if (pos !== -1) {
-            pos++;
-            if (pos >= sequenceOrder.length) pos = 0;
-            newOrder = sequenceOrder[pos];
+          let sequenceOrder = ['asc', 'desc'];
+          if (columns[index].sortDescFirst) {
+            sequenceOrder = ['desc', 'asc'];
           }
-        }
+          if (columns[index].sortThirdClickReset) {
+            sequenceOrder.push('none');
+          }
 
-        const newSortOrder = {
-          name: columns[index].name,
-          direction: newOrder,
-        };
+          if (columns[index].name === this.state.sortOrder.name) {
+            let pos = sequenceOrder.indexOf(this.state.sortOrder.direction);
+            if (pos !== -1) {
+              pos++;
+              if (pos >= sequenceOrder.length) pos = 0;
+              newOrder = sequenceOrder[pos];
+            }
+          }
 
-        const orderLabel = this.getSortDirectionLabel(newSortOrder);
-        const announceText = `Table now sorted by ${columns[index].name} : ${orderLabel}`;
-
-        let newState = {
-          columns: columns,
-          announceText: announceText,
-          activeColumn: index,
-        };
-
-        if (this.options.serverSide) {
-          newState = {
-            ...newState,
-            data: prevState.data,
-            displayData: prevState.displayData,
-            selectedRows: prevState.selectedRows,
-            sortOrder: newSortOrder,
+          const newSortOrder = {
+            name: columns[index].name,
+            direction: newOrder,
           };
-        } else {
-          const sortedData = this.sortTable(data, index, newOrder, columns[index].sortCompare);
 
-          newState = {
-            ...newState,
-            data: sortedData.data,
-            displayData: this.getDisplayData(
-              columns,
-              sortedData.data,
-              prevState.filterList,
-              prevState.searchText,
-              null,
-              this.props,
-            ),
-            selectedRows: sortedData.selectedRows,
-            sortOrder: newSortOrder,
-            previousSelectedRow: null,
+          const orderLabel = this.getSortDirectionLabel(newSortOrder);
+          const announceText = `Table now sorted by ${columns[index].name} : ${orderLabel}`;
+
+          let newState = {
+            columns: columns,
+            announceText: announceText,
+            activeColumn: index,
           };
-        }
 
-        return newState;
-      },
-      () => {
-        this.setTableAction('sort');
+          if (this.options.serverSide) {
+            newState = {
+              ...newState,
+              data: prevState.data,
+              displayData: prevState.displayData,
+              selectedRows: prevState.selectedRows,
+              sortOrder: newSortOrder,
+            };
+          } else {
+            const sortedData = this.sortTable(data, index, newOrder, columns[index].sortCompare);
 
-        if (this.options.onColumnSortChange) {
-          this.options.onColumnSortChange(this.state.sortOrder.name, this.state.sortOrder.direction);
-        }
-      },
-    );
+            newState = {
+              ...newState,
+              data: sortedData.data,
+              displayData: this.getDisplayData(
+                columns,
+                sortedData.data,
+                prevState.filterList,
+                prevState.searchText,
+                null,
+                this.props,
+              ),
+              selectedRows: sortedData.selectedRows,
+              sortOrder: newSortOrder,
+              previousSelectedRow: null,
+            };
+          }
+
+          return newState;
+        },
+        () => {
+          this.setTableAction('sort');
+
+          if (this.options.onColumnSortChange) {
+            this.options.onColumnSortChange(this.state.sortOrder.name, this.state.sortOrder.direction);
+          }
+        },
+      );
+    });
   };
 
   changeRowsPerPage = rows => {
     const rowCount = this.options.count || this.state.displayData.length;
 
-    this.setState(
-      () => ({
-        rowsPerPage: rows,
-        page: getPageValue(rowCount, rows, this.state.page),
-      }),
-      () => {
-        this.setTableAction('changeRowsPerPage');
+    flushSync(() => {
+      this.setState(
+        () => ({
+          rowsPerPage: rows,
+          page: getPageValue(rowCount, rows, this.state.page),
+        }),
+        () => {
+          this.setTableAction('changeRowsPerPage');
 
-        if (this.options.onChangeRowsPerPage) {
-          this.options.onChangeRowsPerPage(this.state.rowsPerPage);
-        }
-      },
-    );
+          if (this.options.onChangeRowsPerPage) {
+            this.options.onChangeRowsPerPage(this.state.rowsPerPage);
+          }
+        },
+      );
+    });
   };
 
   changePage = page => {
-    this.setState(
-      () => ({
-        page: page,
-      }),
-      () => {
-        this.setTableAction('changePage');
-        if (this.options.onChangePage) {
-          this.options.onChangePage(this.state.page);
-        }
-      },
-    );
+    flushSync(() => {
+      this.setState(
+        () => ({
+          page: page,
+        }),
+        () => {
+          this.setTableAction('changePage');
+          if (this.options.onChangePage) {
+            this.options.onChangePage(this.state.page);
+          }
+        },
+      );
+    });
   };
 
   searchClose = () => {

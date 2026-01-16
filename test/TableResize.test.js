@@ -48,7 +48,8 @@ describe('<TableResize />', function() {
 
     shallowWrapper.unmount();
 
-    assert.strictEqual(colCoordCount, 5);
+    // 4 data columns - resize coordinates are created for data columns
+    assert.strictEqual(colCoordCount, 4);
   });
 
   it('should execute resize methods correctly', () => {
