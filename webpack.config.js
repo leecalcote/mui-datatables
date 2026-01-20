@@ -1,4 +1,3 @@
-const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
@@ -28,12 +27,19 @@ module.exports = {
       },
       {
         test: /\.(js|jsx)$/,
-        include: /node_modules\/(@mui|@emotion|tss-react)/,
+        include: /node_modules\/(@mui|@emotion)/,
         use: [
           {
             loader: 'babel-loader',
             options: {
-              configFile: path.resolve(__dirname, '.babelrc'),
+              babelrc: false,
+              configFile: false,
+              plugins: [
+                '@babel/plugin-proposal-class-properties',
+                '@babel/plugin-proposal-nullish-coalescing-operator',
+                '@babel/plugin-proposal-optional-chaining',
+              ],
+              sourceType: 'unambiguous',
             },
           },
         ],
