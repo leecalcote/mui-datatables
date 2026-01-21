@@ -541,11 +541,11 @@ After you make your changes locally, you can run the test suite with `npm test`.
 ## License
 The files included in this repository are licensed under the MIT license.
 
+<hr/>
 
 ## Join the Community!
 
 
-<hr/>
 
 <a name="contributing"></a><a name="community"></a>
 Our projects are community-driven and open to collaboration. 👍 Be sure to see the <a href="https://layer5.io/community/newcomers">Layer5 Community Welcome Guide</a> for a tour of resources available to you. You can also join our <a href="http://slack.layer5.io">Slack</a> to get involved.
