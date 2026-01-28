@@ -33,6 +33,8 @@ MUI-Datatables is a responsive datatables component built on [Material-UI](https
 
 `npm install mui-datatables --save`
 
+React 18+ is required (both `react` and `react-dom`). This is a breaking change for projects still on React 16 or 17.
+
 If your project doesn't already use them, you need to install MUI v7 and its icon pack:  
 `npm --save install @mui/material @emotion/react @emotion/styled @mui/icons-material`
 
@@ -425,7 +427,6 @@ class CustomDataTable extends React.Component {
 Supported customizable components:
  * `Checkbox` - A special 'data-description' prop lets you differentiate checkboxes [Example](https://github.com/leecalcote/mui-datatables/blob/master/examples/custom-components/index.js). Valid values: ['row-select', 'row-select-header', 'table-filter', 'table-view-col'].The dataIndex is also passed via the "data-index" prop.
  * `ExpandButton` [Example](https://github.com/leecalcote/mui-datatables/blob/master/examples/expandable-rows/index.js)
- * `DragDropBackend`
  * `TableBody`
  * `TableViewCol` - The component that displays the view/hide list of columns on the toolbar.
  * `TableFilterList` - You can pass `ItemComponent` prop to render custom filter list item.
